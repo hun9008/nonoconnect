@@ -11,16 +11,30 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import datetime, os, json
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+secret_file = BASE_DIR / 'secrets.json'
+with open(secret_file) as file:
+    secrets = json.loads(file.read())
+
+def get_secret(setting, secrets_dict=secrets):
+    try:
+        return secrets_dict[setting]
+    except KeyError:
+        error_msg = f'Set the {setting} environmnet variable'
+        raise ImproperlyConfigured(error_msg)
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-im@_58eh__t&7*c2zi5l*dbjkp@oil9vcq8u^qhmhcnzh*b8wa'
+SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,13 +44,19 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS  = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+PROJECT_APPS = [
+]
+
+THIRD_PARTY_APPS = [
+    
 ]
 
 MIDDLEWARE = [
@@ -109,13 +129,15 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False # 한국 시간대 사용
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

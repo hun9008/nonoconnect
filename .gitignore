@@ -1,1 +1,4 @@
+# Virtual Environment
 hackathon_env/
+# secret
+secrets.json
