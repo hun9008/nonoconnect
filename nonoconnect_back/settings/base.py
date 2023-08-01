@@ -37,9 +37,9 @@ def get_secret(setting, secrets_dict=secrets):
 SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -51,6 +51,9 @@ DJANGO_APPS  = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 이후 추가
+    'posting.apps.PostingConfig',
+    "rest_framework"
 ]
 PROJECT_APPS = [
 ]
