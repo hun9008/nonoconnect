@@ -2,3 +2,5 @@
 hackathon_env/
 # secret
 secrets.json
+# secret && algorithm
+my_settings.py
