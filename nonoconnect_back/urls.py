@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from posting.views import Main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('User/', include("users.urls"))
+    path('User/', include("users.urls")),
+    path('posting/', include("posting.urls")),  # 새로운 패턴 추가
+    path('', Main.as_view(), name='main'),  # /main/ 경로에 Main View를 매핑
 ]
