@@ -6,11 +6,11 @@ import SideBar from './SideBar.js';
 const MainPage = () => {
 
   const [blocks, setBlocks] = useState([
-    { title: 'Block 1', content: 'Block 1 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 1', info: 'User Info 1' } },
-    { title: 'Block 2', content: 'Block 2 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 2', info: 'User Info 2' } },
-    { title: 'Block 3', content: 'Block 3 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 3', info: 'User Info 3' }  },
-    { title: 'Block 4', content: 'Block 4 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 4', info: 'User Info 4' }  },
-    // ...
+    { title: 'Block 1', content: 'Block 1 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 1', info: 'User Info 1' }, req_img: require('../assets/images/user_1.png') },
+    { title: 'Block 2', content: 'Block 2 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 2', info: 'User Info 2' }, req_img: require('../assets/images/user_2.jpeg') },
+    { title: 'Block 3', content: 'Block 3 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 3', info: 'User Info 3' }, req_img: require('../assets/images/user_3.jpg')  },
+    { title: 'Block 4', content: 'Block 4 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 4', info: 'User Info 4' }, req_img: require('../assets/images/user_4.jpg')  },
+    // status(삭제) = isVisible
   ]);
 
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
@@ -20,50 +20,47 @@ const MainPage = () => {
 
   const [acceptedUser, setAcceptedUser] = useState(null); // 수락된 사용자 정보 상태
 
+  const handleBlockAccept = useCallback((userName) => {
+    // Find the accepted block
+    const block = blocks.find(block => block.user.name === userName);
+    if (block !== undefined) {
+        // Save the accepted block's info
+        setAcceptedUser(block);  // Save the entire block information instead of just user info
 
-  const handleBlockAccept = useCallback((user) => {
-    setAcceptedUser(user);
+        // Hide the accepted block
+        const index = blocks.findIndex(block => block.user.name === userName);
+        if (index !== -1) {
+            const newBlocks = [...blocks];
+            newBlocks[index].isVisible = false;
+            setBlocks(newBlocks);
+        }
+    }
+    // Show the sidebar
     setSidebarVisible(true);
     Animated.timing(sidebarAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: false,
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
     }).start();
-    // added
-    const index = blocks.findIndex(block => block.user.name === user);
-    if (index !== -1) {
-      const newBlocks = [...blocks];
-      newBlocks[index].isVisible = false;
-      setBlocks(newBlocks);
-    }
   }, [sidebarAnim, blocks]);
 
-  // const handleBlockAccept = useCallback((userName) => {
-  //   // Find the accepted block
-  //   const block = blocks.find(block => block.user.name === userName);
-  //   if (block !== undefined) {
-  //     // Save the accepted block's info
-  //     setAcceptedUser(block);
-    
-  //     // Hide the accepted block
-  //     const index = blocks.findIndex(block => block.user.name === userName);
-  //     if (index !== -1) {
-  //       const newBlocks = [...blocks];
-  //       newBlocks[index].isVisible = false;
-  //       setBlocks(newBlocks);
-  //     }
-  //   }
-  
-  //   // Show the sidebar
+
+  // const handleBlockAccept = useCallback((user) => {
+  //   setAcceptedUser(user);
   //   setSidebarVisible(true);
   //   Animated.timing(sidebarAnim, {
   //     toValue: 1,
   //     duration: 300,
   //     useNativeDriver: false,
   //   }).start();
+  //   // added
+  //   const index = blocks.findIndex(block => block.user.name === user);
+  //   if (index !== -1) {
+  //     const newBlocks = [...blocks];
+  //     newBlocks[index].isVisible = false;
+  //     setBlocks(newBlocks);
+  //   }
   // }, [sidebarAnim, blocks]);
-  
-  
 
   const handleBlockReject = useCallback((userName) => {
     const index = blocks.findIndex(block => block.user.name === userName);
@@ -80,7 +77,7 @@ const MainPage = () => {
     setSidebarVisible(false);
   
     // Show the block of the rejected user
-    const index = blocks.findIndex(block => block.user.name === acceptedUser);
+    const index = blocks.findIndex(block => block.user.name === acceptedUser.user.name);
     if (index !== -1) {
       const newBlocks = [...blocks];
       newBlocks[index].isVisible = true;
@@ -100,7 +97,7 @@ const MainPage = () => {
 
   const handleExpandSidebar = () => {
     Animated.timing(sidebarHeight, {
-      toValue: isSidebarExpanded ? 200 : 400, // Toggle height
+      toValue: isSidebarExpanded ? 200 : 600, // Toggle height
       duration: 300,
       useNativeDriver: false,
     }).start(() => {
@@ -114,12 +111,12 @@ const MainPage = () => {
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 10 }}>
           <Image source={require('../assets/userInfo.png')} style={{ width: 30, height: 30 }} />
         </View>
-          {blocks.map((block, index) => <Block key={index} title={block.title} content={block.content} user={block.user} isVisible={block.isVisible} onAccept={() => handleBlockAccept(block.user.name)} onReject={() => handleBlockReject(block.user.name)} />)}
+          {blocks.map((block, index) => <Block key={index} title={block.title} content={block.content} user={block.user} isVisible={block.isVisible} req_img={block.req_img} onAccept={() => handleBlockAccept(block.user.name)} onReject={() => handleBlockReject(block.user.name)} />)}
       </ScrollView>
        {/* sideBar */}
        {isSidebarVisible && (
         <Animated.View style={{ position: 'absolute', bottom: 0, left: marginLeftRight, width: sidebarWidth, height: sidebarHeight }}>
-          <SideBar user={acceptedUser} onExpand={handleExpandSidebar} isExpanded={isSidebarExpanded} onReject={handleSidebarReject}/>
+          <SideBar BlockInfo={acceptedUser} onExpand={handleExpandSidebar} isExpanded={isSidebarExpanded} onReject={handleSidebarReject} sideWidth={sidebarWidth}/>
         </Animated.View>
       )}
     </SafeAreaView>
@@ -127,116 +124,3 @@ const MainPage = () => {
 };
 
 export default MainPage;
-
-
-// import * as React from "react";
-// import { Image } from "expo-image";
-// import { StyleSheet, Text, View, ScrollView } from "react-native";
-// import { FontFamily, Color } from "../GlobalStyles";
-
-// const MainPage = () => {
-//   return (
-//     <ScrollView>
-//       <View style={styles.mainPage}>
-//         <Image
-//           style={[styles.userIcon, styles.iconLayout]}
-//           contentFit="cover"
-//           source={require("../assets/user.png")}
-//         />
-//         <Image
-//           style={styles.iconfillType90}
-//           contentFit="cover"
-//           source={require("../assets/iconfill-type90.png")}
-//         />
-//         <View style={styles.newReqButten}>
-//           <Image
-//             style={[styles.containerIcon, styles.iconLayout]}
-//             contentFit="cover"
-//             source={require("../assets/container.png")}
-//           />
-//           <Image
-//             style={[styles.iconcontentadd, styles.actionPosition]}
-//             contentFit="cover"
-//             source={require("../assets/iconcontentadd.png")}
-//           />
-//           <Text style={[styles.action, styles.actionPosition]}>요청 등록</Text>
-//         </View>
-//       </View>
-//     </ScrollView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   iconLayout: {
-//     maxHeight: "100%",
-//     overflow: "hidden",
-//     maxWidth: "100%",
-//     position: "absolute",
-//   },
-//   actionPosition: {
-//     top: "50%",
-//     position: "absolute",
-//   },
-//   userIcon: {
-//     height: "129.83%",
-//     width: "94.88%",
-//     top: "9.23%",
-//     right: "2.56%",
-//     bottom: "-39.06%",
-//     left: "2.56%",
-//   },
-//   iconfillType90: {
-//     width: "6.98%",
-//     top: 46,
-//     right: "8.14%",
-//     left: "84.88%",
-//     height: 30,
-//     overflow: "hidden",
-//     maxWidth: "100%",
-//     position: "absolute",
-//   },
-//   containerIcon: {
-//     top: -9,
-//     right: -10,
-//     bottom: -11,
-//     left: -10,
-//     borderRadius: 10,
-//   },
-//   iconcontentadd: {
-//     marginTop: -12,
-//     left: 12,
-//     width: 24,
-//     height: 24,
-//     overflow: "hidden",
-//   },
-//   action: {
-//     marginTop: -8,
-//     left: 48,
-//     fontSize: 16,
-//     letterSpacing: 1,
-//     lineHeight: 16,
-//     textTransform: "uppercase",
-//     fontWeight: "700",
-//     fontFamily: FontFamily.robotoBold,
-//     color: Color.whiteHighEmphasis,
-//     textAlign: "center",
-//     width: 82,
-//   },
-//   newReqButten: {
-//     width: "34.88%",
-//     right: "6.98%",
-//     bottom: 12,
-//     left: "58.14%",
-//     height: 40,
-//     position: "absolute",
-//   },
-//   mainPage: {
-//     backgroundColor: "#f5f5f5",
-//     flex: 1,
-//     width: "100%",
-//     height: 932,
-//   },
-// });
-
-// export default MainPage;
-
