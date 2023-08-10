@@ -25,7 +25,7 @@ const Block = ({ title, user, content, isVisible, req_img, onAccept ,onReject })
       {user && <UserBlock user={user} />}
       <Text style={{ fontSize: 20, textAlign: 'left', marginTop: 10 ,marginLeft: 10}}>{title}</Text>
       <Text style={{ fontSize: 16, textAlign: 'left', marginTop: 5 ,marginLeft: 10}}>{content}</Text>
-      <Image source={req_img} style={{width: screenWidth * 0.9, height: 150, marginTop:20}}/>
+      <Image source={{uri: req_img}} style={{width: screenWidth * 0.9, height: 150, marginTop:20}}/>
       <View style={{ flexDirection: 'row', position: 'absolute', right: 10, bottom: 10 }}>
         <TouchableOpacity onPress={handleAccept} style={{ marginRight: 10, padding: 10, backgroundColor: '#FFDB0F', borderColor: 'black', borderWidth: 1, borderRadius: 5 }}>
           <Text>수락</Text> 

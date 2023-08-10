@@ -49,7 +49,7 @@ const SideBar = ({ BlockInfo, onExpand, onReject, isExpanded, sideWidth}) => {
                 {/* {BlockInfo && <UserBlock user={BlockInfo.user} />} */}
                 <Text style={{ fontSize: 20, textAlign: 'left', marginTop: 10 ,marginLeft: 10}}>{BlockInfo.title}</Text>
                 <Text style={{ fontSize: 16, textAlign: 'left', marginTop: 5 ,marginLeft: 10}}>{BlockInfo.content}</Text>
-                <Image source={BlockInfo.req_img} style={{width: sideWidth * 0.9, height: 150, marginTop:20}}/>
+                <Image source={{uri: BlockInfo.req_img}} style={{width: sideWidth * 0.9, height: 150, marginTop:20}}/>
             </View>
         </View>
     );

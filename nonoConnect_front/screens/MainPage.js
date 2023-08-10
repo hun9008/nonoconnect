@@ -1,15 +1,24 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { SafeAreaView, ScrollView, Animated, View, Dimensions, Image } from 'react-native';
+import { SafeAreaView, ScrollView, Animated, View, Dimensions, Image, TouchableOpacity, Modal, Text } from 'react-native';
 import Block from './Block.js';
 import SideBar from './SideBar.js';
+import RequestPopup from './RequestPopup.js';
+import RequestAdd from './RequestAdd.js';
+import {Asset} from 'expo-asset';
+
 
 const MainPage = () => {
 
+  const image1 = Asset.fromModule(require('../assets/images/user_1.png')).uri;
+  const image2 = Asset.fromModule(require('../assets/images/user_2.jpeg')).uri;
+  const image3 = Asset.fromModule(require('../assets/images/user_3.jpg')).uri;
+  const image4 = Asset.fromModule(require('../assets/images/user_4.jpg')).uri;
+
   const [blocks, setBlocks] = useState([
-    { title: 'Block 1', content: 'Block 1 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 1', info: 'User Info 1' }, req_img: require('../assets/images/user_1.png') },
-    { title: 'Block 2', content: 'Block 2 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 2', info: 'User Info 2' }, req_img: require('../assets/images/user_2.jpeg') },
-    { title: 'Block 3', content: 'Block 3 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 3', info: 'User Info 3' }, req_img: require('../assets/images/user_3.jpg')  },
-    { title: 'Block 4', content: 'Block 4 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 4', info: 'User Info 4' }, req_img: require('../assets/images/user_4.jpg')  },
+    { title: 'Block 1', content: 'Block 1 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 1', info: 'User Info 1' }, req_img: image1 },
+    { title: 'Block 2', content: 'Block 2 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 2', info: 'User Info 2' }, req_img: image2},
+    { title: 'Block 3', content: 'Block 3 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 3', info: 'User Info 3' }, req_img: image3  },
+    { title: 'Block 4', content: 'Block 4 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 4', info: 'User Info 4' }, req_img: image4  },
     // status(삭제) = isVisible
   ]);
 
@@ -19,6 +28,9 @@ const MainPage = () => {
   const sidebarAnim = useRef(new Animated.Value(0)).current;
 
   const [acceptedUser, setAcceptedUser] = useState(null); // 수락된 사용자 정보 상태
+
+  const [isPopupVisible, setPopupVisible] = useState(false); // 요청 등록
+  const [isAddVisible, setAddVisible] = useState(false);
 
   const handleBlockAccept = useCallback((userName) => {
     // Find the accepted block
@@ -43,24 +55,6 @@ const MainPage = () => {
         useNativeDriver: false,
     }).start();
   }, [sidebarAnim, blocks]);
-
-
-  // const handleBlockAccept = useCallback((user) => {
-  //   setAcceptedUser(user);
-  //   setSidebarVisible(true);
-  //   Animated.timing(sidebarAnim, {
-  //     toValue: 1,
-  //     duration: 300,
-  //     useNativeDriver: false,
-  //   }).start();
-  //   // added
-  //   const index = blocks.findIndex(block => block.user.name === user);
-  //   if (index !== -1) {
-  //     const newBlocks = [...blocks];
-  //     newBlocks[index].isVisible = false;
-  //     setBlocks(newBlocks);
-  //   }
-  // }, [sidebarAnim, blocks]);
 
   const handleBlockReject = useCallback((userName) => {
     const index = blocks.findIndex(block => block.user.name === userName);
@@ -87,6 +81,29 @@ const MainPage = () => {
     // Clear the accepted user
     setAcceptedUser(null);
   }, [blocks, acceptedUser]);
+
+  const handleOpenPopup = () => {
+    setPopupVisible(true);
+  };
+  
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+  };
+
+  const handleMoveAdd = () => {
+    setPopupVisible(false);
+    setAddVisible(true);
+  }
+
+  const handleGoBackPopup = () => {
+    setAddVisible(false);
+    setPopupVisible(true);
+  }
+
+  const handleGoMain = () => {
+    setAddVisible(false);
+    setPopupVisible(false);
+  }
 
 
   const screenWidth = Dimensions.get('window').width;
@@ -119,6 +136,21 @@ const MainPage = () => {
           <SideBar BlockInfo={acceptedUser} onExpand={handleExpandSidebar} isExpanded={isSidebarExpanded} onReject={handleSidebarReject} sideWidth={sidebarWidth}/>
         </Animated.View>
       )}
+      {/* new request */}
+      <View>
+          <TouchableOpacity onPress={handleOpenPopup} style={{ position: 'absolute', left: 20, bottom: 20, width: 100, height: 30, backgroundColor: '#FFDB0F', borderColor: 'black', borderWidth: 1, borderRadius: 5, justifyContent: 'center' }}>
+            <Text style={{color: 'black', textAlign: 'center'}}>+  요청등록</Text>
+          </TouchableOpacity>
+        
+
+        <Modal visible={isPopupVisible} animationType="slide" transparent={true}>
+          <RequestPopup onClose={handleClosePopup} onMove={handleMoveAdd}/>
+        </Modal>
+
+        <Modal visible={isAddVisible} animationType="slide" transparent={true}>
+          <RequestAdd onMoveMain={handleGoMain} onMoveBack={handleGoBackPopup} blocks={blocks} setBlocks={setBlocks} />
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 };
