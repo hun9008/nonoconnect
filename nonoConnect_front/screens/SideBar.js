@@ -1,22 +1,11 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity} from 'react-native';
 import UserBlock from './UserBlock';
 
-const SideBar = ({ BlockInfo, onExpand, onReject, isExpanded, sideWidth}) => {
+const SideBar = ({ BlockInfo, onExpand, onReject, isExpanded, sideWidth, onMap}) => {
 
     const buttonText = isExpanded ? '숨김' : '자세히';
 
-    
-
-
-    // const [isExpanded, setIsExpanded] = useState(false);
-    // const [buttonText, setButtonText] = useState('자세히');
-    // const sidebarHeight = isExpanded ? 400 : 200; // Adjust the height as needed
-
-    // const handleDetailsButton = () => {
-    //     setIsExpanded(!isExpanded);
-    //     setButtonText(isExpanded ? '자세히' : '숨김');
-    // };
     
     return (
         <View style={{
@@ -36,8 +25,8 @@ const SideBar = ({ BlockInfo, onExpand, onReject, isExpanded, sideWidth}) => {
                     <TouchableOpacity onPress={onExpand} style={{ marginRight: 10, padding: 10, backgroundColor: '#FFDB0F', borderColor: 'black', borderWidth: 1, borderRadius: 5 }}>
                         <Text>{buttonText}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ padding: 10, borderColor: 'black', borderWidth: 1, borderRadius: 5 }}>
-                        <Text>길안내</Text>
+                    <TouchableOpacity onPress={onMap} style={{ padding: 10, borderColor: 'black', borderWidth: 1, borderRadius: 5 }}>
+                        <Text>요청위치</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={onReject} style={{ marginLeft: 10, padding: 10, backgroundColor: '#FFDB0F', borderColor: 'black', borderWidth: 1, borderRadius: 5 }}>
                         <Text>거절</Text>

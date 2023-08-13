@@ -18,7 +18,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ajou.nonoConnect",
+      "config":{
+          "googleMapsApiKey": "AIzaSyB5QardOI_ioBzyH3cpu539Wj8o8FR_BMg"
+      }
     },
     "android": {
       "adaptiveIcon": {

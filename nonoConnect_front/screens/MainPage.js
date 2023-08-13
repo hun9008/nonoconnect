@@ -5,6 +5,7 @@ import SideBar from './SideBar.js';
 import RequestPopup from './RequestPopup.js';
 import RequestAdd from './RequestAdd.js';
 import {Asset} from 'expo-asset';
+import GoogleMap from './Maps.js';
 
 
 const MainPage = () => {
@@ -16,7 +17,7 @@ const MainPage = () => {
 
   const [blocks, setBlocks] = useState([
     { title: 'Block 1', content: 'Block 1 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 1', info: 'User Info 1' }, req_img: image1 },
-    { title: 'Block 2', content: 'Block 2 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 2', info: 'User Info 2' }, req_img: image2},
+    { title: 'Block 2', content: 'Block 2 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 2', info: 'User Info 2' }, req_img: image2 },
     { title: 'Block 3', content: 'Block 3 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 3', info: 'User Info 3' }, req_img: image3  },
     { title: 'Block 4', content: 'Block 4 Content', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 4', info: 'User Info 4' }, req_img: image4  },
     // status(삭제) = isVisible
@@ -31,6 +32,9 @@ const MainPage = () => {
 
   const [isPopupVisible, setPopupVisible] = useState(false); // 요청 등록
   const [isAddVisible, setAddVisible] = useState(false);
+
+  const [isMapVisible, setMapVisible] = useState(false);
+
 
   const handleBlockAccept = useCallback((userName) => {
     // Find the accepted block
@@ -105,6 +109,14 @@ const MainPage = () => {
     setPopupVisible(false);
   }
 
+  const handleMap = () => {
+    setMapVisible(true);
+  }
+
+  const closeMap = () => {
+    setMapVisible(false);
+  }
+
 
   const screenWidth = Dimensions.get('window').width;
   const sidebarWidth = screenWidth * 0.95; // 사이드바 너비를 화면 너비의 80%로 설정
@@ -133,7 +145,7 @@ const MainPage = () => {
        {/* sideBar */}
        {isSidebarVisible && (
         <Animated.View style={{ position: 'absolute', bottom: 0, left: marginLeftRight, width: sidebarWidth, height: sidebarHeight }}>
-          <SideBar BlockInfo={acceptedUser} onExpand={handleExpandSidebar} isExpanded={isSidebarExpanded} onReject={handleSidebarReject} sideWidth={sidebarWidth}/>
+          <SideBar BlockInfo={acceptedUser} onExpand={handleExpandSidebar} isExpanded={isSidebarExpanded} onReject={handleSidebarReject} sideWidth={sidebarWidth} onMap={handleMap}/>
         </Animated.View>
       )}
       {/* new request */}
@@ -150,8 +162,13 @@ const MainPage = () => {
         <Modal visible={isAddVisible} animationType="slide" transparent={true}>
           <RequestAdd onMoveMain={handleGoMain} onMoveBack={handleGoBackPopup} blocks={blocks} setBlocks={setBlocks} />
         </Modal>
+
+        <Modal visible={isMapVisible} animationType="slide" transparent={true}>
+          <GoogleMap onMapClose={closeMap}/>
+        </Modal>
       </View>
     </SafeAreaView>
+    
   );
 };
 
