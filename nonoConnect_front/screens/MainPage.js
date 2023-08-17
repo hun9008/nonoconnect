@@ -279,6 +279,9 @@ useEffect(() => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+        <Modal visible={isMapVisible} animationType="slide" transparent={true}>
+          <GoogleMap onMapClose={closeMap}/>
+        </Modal>
       {/* <ScrollView>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 10 }}>
           <TouchableOpacity onPress={logoutUser} style={{position: 'absolute', left:10,top:15, width:70, height: 30, justifyContent: 'center' }}>
@@ -347,9 +350,9 @@ useEffect(() => {
           <RequestAdd onMoveMain={handleGoMain} onMoveBack={handleGoBackPopup} blocks={blocks} setBlocks={setBlocks} user_id={userId}/>
         </Modal>
 
-        <Modal visible={isMapVisible} animationType="slide" transparent={true}>
+        {/* <Modal visible={isMapVisible} animationType="slide" transparent={true}>
           <GoogleMap onMapClose={closeMap}/>
-        </Modal>
+        </Modal> */}
       </View>
     </SafeAreaView>
     

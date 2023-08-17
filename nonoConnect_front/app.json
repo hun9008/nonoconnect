@@ -20,18 +20,24 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ajou.nonoConnect",
-      "config":{
-          "googleMapsApiKey": "AIzaSyB5QardOI_ioBzyH3cpu539Wj8o8FR_BMg"
+      "config": {
+        "googleMapsApiKey": "AIzaSyB5QardOI_ioBzyH3cpu539Wj8o8FR_BMg"
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ajou.nonoConnect"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fd4921b0-5479-4243-b096-c40623f42407"
+      }
     }
   }
 }
