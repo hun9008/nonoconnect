@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import {useState} from 'react';
 import MainPage from "./screens/MainPage";
+import Login from "./screens/login";
+import SignUp from "./screens/SignUp";
 
 // import RequestPopup from './screens/RequestPopup';
 // import RequestAdd from './screens/RequestAdd';
@@ -17,6 +19,8 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // State to manage login
+  const [nickname, setNickname] = useState("");
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Roboto-Bold": require("./assets/fonts/NotoSansKR-Bold.ttf"),
@@ -26,22 +30,25 @@ const App = () => {
     return null;
   }
 
+  const handleLoginSuccess = () => {
+      setIsLoggedIn(true);
+  }
+
+
   return (
     <>
     
-      <NavigationContainer>
-          {hideSplashScreen ? (
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen
-                name="MainPage"
-                component={MainPage}
-                options={{ headerShown: false }}
-              />
-              {/* <Stack.Screen name="RequestPopup" component={RequestPopup} options={{ headerShown: false }}/>
-              <Stack.Screen name="RequestAdd" component={RequestAdd} options={{ headerShown: false }}/> */}
-            </Stack.Navigator>
-          ) : null}
-      </NavigationContainer>
+    <NavigationContainer>
+        <Stack.Navigator initialRouteName={isLoggedIn ? "MainPage" : "Login"}>
+            <Stack.Screen name="Login" options={{ headerShown: false }}>
+                {(props) => <Login {...props} onLoginSuccess={handleLoginSuccess} setUserNickname={setNickname} />}
+            </Stack.Screen>
+            <Stack.Screen name="SignUp" component={SignUp} options={{ title: '회원가입' }} />
+            <Stack.Screen name="MainPage" component={MainPage} initialParams={{ nickname: nickname }} />
+        </Stack.Navigator>
+    </NavigationContainer>
+
+
     
 
     </>

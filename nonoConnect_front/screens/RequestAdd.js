@@ -4,9 +4,7 @@ import { selectedText } from './RequestPopup';
 import { selectedId } from './RequestPopup';
 import * as ImagePicker from 'expo-image-picker';
 
-
-
-const RequestAdd = ({onMoveMain, onMoveBack, blocks, setBlocks}) => {
+const RequestAdd = ({onMoveMain, onMoveBack, blocks, setBlocks, user_id}) => {
 
     // const [buffer, setbuffer] = useState([
     //     { title: '', content: '', isVisible: true, user: { image: 'assets/userIcon.png', name: 'User Name 1', info: 'User Info 1' }, req_img: require('') },
@@ -65,38 +63,85 @@ const RequestAdd = ({onMoveMain, onMoveBack, blocks, setBlocks}) => {
         }
     }
 
-    // const chooseImage = async () => {
-    //     let result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //         allowsEditing: true,
-    //         aspect: [4, 3],
-    //         quality: 1,
-    //     });
-
-    //     if (!result.canceled) { 
-    //         if (result.assets && result.assets.length > 0) {  // "assets" 배열을 사용하여 이미지 정보 접근
-    //             setImageSource(result.assets[0].uri);  // 첫 번째 자산의 uri 사용
+    // const handleAddBlock = () => {
+    //     const newBlock = {
+    //         title: title, // setTitle 상태값
+    //         content: content, // setContent 상태값
+    //         req_img: imageSource, // setImageSource 상태값
+    //         isVisible: true,
+    //         user: {
+    //             image: 'assets/userIcon.png',
+    //             name: 'User Name 5',
+    //             info: 'User Info 5'
     //         }
-    //     }
-    //     console.log(imageSource);
-    //     // setImageSource(result.assets);
+    //     };
+    //     setBlocks(prevBlocks => [...prevBlocks, newBlock]);
+    //     onMoveMain();
     // };
 
+    // const handleAddBlock = () => {
+    //     const feedData = {
+    //         title: title,
+    //         context: content,
+    //         longitude: 127.0,  // 예시 위도
+    //         latitude: 37.0,   // 예시 경도
+    //         user_id: 1,        // 예시 사용자 ID
+    //     };
+        
+    //     fetch("http://192.168.0.26:8000/posting/feed/add", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(feedData),
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data);
+    //     })
+    //     .catch(error => {
+    //         console.error("Error:", error);
+    //     });
+    //     onMoveMain();
+    // };
     const handleAddBlock = () => {
-        const newBlock = {
-            title: title, // setTitle 상태값
-            content: content, // setContent 상태값
-            req_img: imageSource, // setImageSource 상태값
-            isVisible: true,
-            user: {
-                image: 'assets/userIcon.png',
-                name: 'User Name 5',
-                info: 'User Info 5'
-            }
-        };
-        setBlocks(prevBlocks => [...prevBlocks, newBlock]);
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('context', content);
+        formData.append('longitude', 127.0);  // 예시 위도
+        formData.append('latitude', 37.0);    // 예시 경도
+        formData.append('user_id', user_id);        // 예시 사용자 ID
+    
+        // 이미지 추가
+        if (imageSource) {
+            let uriParts = imageSource.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+            formData.append('FILES', {
+                uri: imageSource,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            });
+            console.log(formData.image);
+        }
+    
+        fetch("http://192.168.0.26:8000/posting/feed/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    
         onMoveMain();
     };
+    
 
     return (
         <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' ,backgroundColor: 'white'}}>
