@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text , TouchableOpacity, TextInput, Image, Dimensions} from 'react-native';
+import { View, Text , TouchableOpacity, TextInput, Image, Dimensions, Alert} from 'react-native';
 import { selectedText } from './RequestPopup';
 import { selectedId } from './RequestPopup';
 import * as ImagePicker from 'expo-image-picker';
@@ -63,53 +63,40 @@ const RequestAdd = ({onMoveMain, onMoveBack, blocks, setBlocks, user_id}) => {
         }
     }
 
-    // const handleAddBlock = () => {
-    //     const newBlock = {
-    //         title: title, // setTitle 상태값
-    //         content: content, // setContent 상태값
-    //         req_img: imageSource, // setImageSource 상태값
-    //         isVisible: true,
-    //         user: {
-    //             image: 'assets/userIcon.png',
-    //             name: 'User Name 5',
-    //             info: 'User Info 5'
-    //         }
-    //     };
-    //     setBlocks(prevBlocks => [...prevBlocks, newBlock]);
-    //     onMoveMain();
-    // };
-
-    // const handleAddBlock = () => {
-    //     const feedData = {
-    //         title: title,
-    //         context: content,
-    //         longitude: 127.0,  // 예시 위도
-    //         latitude: 37.0,   // 예시 경도
-    //         user_id: 1,        // 예시 사용자 ID
-    //     };
+    // const [Latitude, setLatitude] = useState(37.28452617085025);
+    // const [Longitude, setLongitude] = useState(127.04598613080317);
+  
+  
+    // const getLocation = async () => {
+    
+    //   try {
+      
+    //     await Location.requestForegroundPermissionsAsync();
         
-    //     fetch("http://192.168.0.26:8000/posting/feed/add", {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(feedData),
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         console.log(data);
-    //     })
-    //     .catch(error => {
-    //         console.error("Error:", error);
-    //     });
-    //     onMoveMain();
+    //     const {
+    //       coords: {  latitude: currentLatitude, longitude: currentLongitude  },
+    //     } = await Location.getCurrentPositionAsync();
+  
+    //     console.log(currentLatitude);
+    //     console.log(currentLongitude);
+    //     setLatitude(currentLatitude);
+    //     setLongitude(currentLongitude);
+    //     setIsLoading(false);
+        
+    //   } catch (e) {
+    //     Alert.alert("위치정보를 가져올 수 없습니다.");
+    //   }
+      
     // };
+  
+    // getLocation();
+
     const handleAddBlock = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('context', content);
-        formData.append('longitude', 127.0);  // 예시 위도
-        formData.append('latitude', 37.0);    // 예시 경도
+        formData.append('longitude', 137);  // 예시 위도
+        formData.append('latitude', 38);    // 예시 경도
         formData.append('user_id', user_id);        // 예시 사용자 ID
     
         // 이미지 추가
