@@ -1,0 +1,27 @@
+장고설치
+
+pip install django
+
+설정파일 지정
+
+export DJANGO_SETTINGS_MODULE=nonoconnect_back.settings.development
+
+rest framework 설치
+
+pip install djangorestframework
+
+bycrpt 설치
+
+pip install bcrypt
+
+jwt 설치
+
+pip install PyJWT
+
+`pip install django-cors-headers`
+
+**python -m pip install Pillow**
+
+migrate
+
+**python manage.py migrate**
